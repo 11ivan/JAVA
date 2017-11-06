@@ -1,0 +1,243 @@
+/*Analisis
+ *  Comentario: El departamento de personal de una Universidad tiene registros del nombre, sexo
+	y edad de cada uno de los profesores adscritos. Escriba un programa que calcule e imprima los
+	siguientes datos 
+ * 
+ * 	Entradas: Cadenas: opcion del menu, 
+ * 
+ * 	Salidas: No hay
+ * 
+ * 	Restricciones: La opcion del menu debe ser mayor o igual que 0  y menor o igual que 5
+ * 
+ * 
+ * PSEUDOCODIGO GENERALIZADO
+ * 
+ * INICIO
+ 	//PRESENTAR MENU LEER Y VALIDAR OPCION*
+ 	
+ 	//MIENTRAS OPCION SEA DISTINTA DE 0
+ 	 
+	 	//SEGUN(OPION)
+	 	 	
+	 	 	//CASO 1	//EDAD PROMEDIO DEL GRUPO DE PROFESORES*
+	 	 	
+	 		//CASO 2	//NOMBRE DEL PROFESOR MAS JOVEN DEL GRUPO*
+	 		
+	 		//CASO 3	//NOMBRE DEL PROFESOR DE MAS EDAD*
+	 		
+	 		//CASO 4	//NUMERO DE PROFESORES CON EDAD MAYOR AL PROMEDIO* 
+	 
+	 		//CASO 5	//NUMERO DE PROFESORES CON EDAD MENOR AL PROMEDIO* 
+ 	
+ 	 	//VOLVER A PRESENTAR MENU LEER Y VALIDAR OPCION*
+	
+ 	//FIN MIENTRAS
+ * FIN
+ */
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+
+public class ProgPricipal {
+	public static void main(String[] args) {
+		
+		Scanner teclado=new Scanner(System.in);
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		//ListaPersonas personas=new ListaPersonas();
+		String ruta;
+		String opcion=null;
+		GestoraProgPrinc gestora=new GestoraProgPrinc();
+		//String nombre, apellido, dni;
+		//char sexo;
+		boolean vale=true;
+		
+	 	//PRESENTAR MENU LEER Y VALIDAR OPCION*
+	 	do{
+	 		gestora.pintaMenu();
+	 		try {
+				opcion=br.readLine();		
+				System.out.println();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	 	}while(!gestora.validaOpcion(opcion));
+	 	
+	 	//MIENTRAS OPCION SEA DISTINTA DE 0
+	 	while(!opcion.equals("0")){
+	 
+		 	switch(opcion){
+		 	 	
+		 		case "1":	//EDAD PROMEDIO DEL GRUPO DE PROFESORES*
+		 					System.out.println("\nLa dedad promedio es "+gestora.edadPromedio());
+		 	 	break;
+		 	 	
+		 	 	
+		 		case "2":	//NOMBRE DEL PROFESOR MAS JOVEN DEL GRUPO*		 					
+		 					gestora.ProfesorJoven();System.out.println();
+		 		break;
+		 		
+		 			
+		 		case "3":	//NOMBRE DEL PROFESOR DE MAS EDAD*		 					
+		 					gestora.ProfesorMayor();System.out.println();
+		 		break;
+		 			
+		 			
+		 		case "4":	//NUMERO DE PROFESORES CON EDAD MAYOR AL PROMEDIO*	 					
+		 					gestora.MayorAMedia();System.out.println();
+		 		break;
+		 			
+		 			
+		 		case "5":	//NUMERO DE PROFESORES CON EDAD MENOR AL PROMEDIO* 		 					
+		 					gestora.MenorAMedia();System.out.println(); 			
+		 		break;
+		 		
+		 		case "6":	//LISTA DE PROFESORES*
+		 					gestora.leePersonas();
+		 		break;
+		 		
+		 		case "7":	//AÑADIR PROFESOR*
+		 					Profesor profesor=new Profesor();
+		 					Fecha2 fecha=new Fecha2();
+		 						//LEER NOMBRE
+		 						do{
+		 							System.out.println("\nIntroduzca el nombre");
+		 							try {
+										profesor.setNombre(br.readLine());
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+		 						}while(!vale);///
+		 						
+		 						//LEER Y VALIDAR APELLIDO
+		 						do{
+		 							System.out.println("\nIntroduzca el primer apellido");
+		 							try {
+										profesor.setApellido(br.readLine());
+									} catch (IOException e) {										
+										e.printStackTrace();
+									}
+		 						}while(!vale);///siempre es valido no hay metodo de validacion de apellido ni de nombre
+		 						
+		 						//LEER Y VALIDAR FECHA NACIMIENTO
+		 						do{
+		 							System.out.println("\nIntroduzca la fecha de nacimiento");
+		 							do{
+		 								vale=true;
+		 								System.out.println("\n\tIntroduzca el año");
+		 								try{
+											profesor.getBirthDate().setYear(teclado.nextInt());
+		 								}catch(ExcepcionFecha error){
+		 									//error.printStackTrace();
+		 									vale=false;
+		 								}
+		 							}while(!vale);
+		 							
+		 							do{
+		 								vale=true;
+		 								System.out.println("\n\tIntroduzca el mes");
+		 								try{
+											profesor.getBirthDate().setMonth(teclado.nextInt());
+		 								}catch(ExcepcionFecha error){
+		 									//error.printStackTrace();
+		 									vale=false;
+		 								}
+		 							}while(!vale);
+		 							
+									do{
+		 								vale=true;
+		 								System.out.println("\tIntroduzca el dia");
+		 								try{
+											profesor.getBirthDate().setDay(teclado.nextInt());
+		 								}catch(ExcepcionFecha error){
+		 									//error.printStackTrace();
+		 									vale=false;
+		 								}
+		 							}while(!vale);
+
+		 						}while(!profesor.getBirthDate().validafecha());
+
+		 						//LEER Y VALIDAR SEXO
+		 						do{
+		 							System.out.println("\nIntroduzca el sexo");
+		 							try {
+										profesor.setSexo(br.readLine());
+										} catch (ExcepcionPersona e) {
+											e.printStackTrace();
+										}catch (IOException e) {
+											e.printStackTrace();
+										}
+		 						}while(!vale);///
+
+		 						//LEER Y VALIDAR DNI
+		 						do{
+		 							vale=true;
+		 							System.out.println("\nIntroduzca el DNI");
+		 							try{
+										profesor.setDNI(br.readLine());
+		 							}catch(ExcepcionPersona error){
+		 								error.printStackTrace();
+		 								vale=false;
+		 							}catch (IOException e) {
+										e.printStackTrace();
+										vale=false;
+									}
+		 						}while(!vale);	 						
+		 						
+		 						//LEER Y VALIDAR MATERIA
+		 						do{
+		 							vale=true;
+		 							System.out.println("\nIntroduzca la materia");
+		 							try {
+										profesor.setMateria(br.readLine());
+									} catch (ExcepcionProfesor e) {
+										e.printStackTrace();
+									} catch (IOException e) {
+										e.printStackTrace();
+										vale=false;
+									}
+		 						}while(!vale);
+		 						System.out.println(gestora.addProfesor(profesor));
+ 				break;
+ 				
+		 		case "8":	//BORRAR PROFESOR*
+		 					System.out.println("Introduzca el dni del profesor a eliminar");
+		 					try{
+		 						//System.out.println(gestora.dropProfesor(br.readLine()));
+		 						if(gestora.dropProfesor(br.readLine())){
+		 							System.out.println("El profesor ha sido eliminado con áíóú");
+		 						}
+		 					}catch(IOException error){
+		 						error.printStackTrace();
+		 					}
+		 					
+ 				break;
+
+
+		 	}//FIN SEGUN
+	 		
+	 	 	//VOLVER A PRESENTAR MENU LEER Y VALIDAR OPCION*
+		 	do{
+		 		gestora.pintaMenu();
+		 		try {
+					opcion=br.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		 	}while(!gestora.validaOpcion(opcion));
+
+	 	}//FIN MIENTRAS
+
+		
+//gestora.escribePersonas();
+//gestora.leePersonas();		
+		
+
+		
+		
+
+	}//
+}//

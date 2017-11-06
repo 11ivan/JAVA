@@ -1,0 +1,21 @@
+
+public class testVestido {
+
+	public static void main(String[] args) {
+		
+		Vestido vestido=new Vestido();
+		
+		try{
+			Vestido vestido2=new Vestido(" ",0.0,4);
+		}catch(ExcepcionVestido error){
+			System.out.println(error);
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+}

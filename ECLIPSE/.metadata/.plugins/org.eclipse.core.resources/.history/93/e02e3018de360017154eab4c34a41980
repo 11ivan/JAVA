@@ -1,0 +1,66 @@
+/*
+ * Analisis
+ * 	Comentario: El supermercado “El carrito mágico” necesita de su ayuda para la creación de un programa
+ * 			    que automatice el proceso de ventas de éste. El dueño del supermercado necesita que cada
+ * 			    uno de sus productos este codificado (para lo cuál puede usar la clasificación de familias
+ * 				de productos, por ej. Fideos, y luego una clasificación de un producto particular dentro de
+ * 				esta familia, por ej. Ravioles marca “La casa” de 250 grs.) y que se mantenga la información
+ * 				de relevancia de estos, junto a su precio. La idea es que cuando el cliente pase por la caja,
+ * 				la cajera ingrese el código del producto o su nombre, la cantidad que el cliente lleva de ese
+ * 				producto y automáticamente el sistema le entregue el precio por cada producto y le genere la
+ * 				factura final, donde, además de aparecer el monto de la compra, debe aparecer la cantidad de
+ * 				artículos que el cliente lleva.
+ * 				Se necesita, además, generar un listado de los productos más vendidos, los montos vendidos en
+ * 				un día y el listado de clientes que compra en el supermercado.
+ * 
+ * 
+ * PseudoCodigo	
+INICIO
+	//LEER Y VALIDAR LOGIN*
+	//SEGUN TIPO USUARIO
+	
+		CASE 1: //TIPO ADMINISTRADOR
+		
+		CASE 2:	//TIPO CLIENTE
+	
+	//FIN SEGUN
+	
+FIN
+ */
+
+/*CASE 1: //TIPO ADMINISTRADOR
+ 			//PRESENTAR MENU LEER Y VALIDAR OPCION
+ 			//MIENTRAS OPCION NO SEA SALIR
+ 			//SEGUN OPCION
+				//CASE 1: IR A UNA SECCION* >> MENU
+				//CASE 2: SOLTAR PRODUCTO*
+				//CASE 3: PASAR POR CAJA*
+				//CASE 4: SALIR SIN COMPRAR*
+			//FIN SEGUN 
+
+
+
+
+
+
+ */
+
+
+
+
+
+
+/*
+ *	1: IR A UNA SECCION >> MENU
+ *	2: SOLTAR PRODUCTO
+ *	3: SALIR SIN COMPRAR
+ *	4: PASAR POR CAJA
+ * 
+ * 
+ * 
+ * */
+
+
+public class PrincCarrito {
+
+}

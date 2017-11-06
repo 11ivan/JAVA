@@ -1,0 +1,19 @@
+
+public class testVestido {
+
+	public static void main(String[] args) {
+		
+		Vestido vestido=new Vestido();
+		
+		try{
+			
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+}

@@ -1,0 +1,40 @@
+/*Pedido.java
+ * 
+ *  Propiedades: 
+ *  	Pedido: Basica, array de articulos, consultable, no modificable
+ * 
+ */
+public class Pedido extends Arrays{
+	private Articulo[] pedido;
+
+	
+	
+	
+	public Articulo[] getPedido(){
+		return pedido;
+	}
+	
+	public double getPrecioPedido(){
+		double precio=0;
+		for(int i=0;i<pedido.length;i++){
+			precio=precio+(pedido[i].getVestido().getPrecio() * pedido[i].getCantidad());
+		}					
+		return precio;
+	}
+	
+	
+	public void paintPedido(){
+		for(int i=0;i<pedido.length;i++){
+			System.out.println(pedido[i].getVestido().getCodigo()+", "+pedido[i].getVestido().getPrecio());
+		}
+		System.out.println("\t\t\t"+getPrecioPedido());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+}

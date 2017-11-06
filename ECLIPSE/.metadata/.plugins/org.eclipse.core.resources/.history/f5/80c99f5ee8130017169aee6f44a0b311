@@ -1,0 +1,163 @@
+/*Vestidos.java
+ * Propiedades: 
+ * 	Nombre: Basica, cadena, consultable, no modificable.
+ * 	Precio: Basica, decimal, consultable, modificable.
+ * 	Codigo: Basica, entero, consultable, no modificable.
+ * 
+ * 
+ * Interfaz:
+ * 	String getNombre
+ * 	double getPrecio
+ * 	double setPrecio
+ * 	int getCodigo
+ * 
+ * 
+ * Restricciones:
+ * 	El codigo es una cifra de tres digitos enteros positivos
+ * 	El precio debe ser positivo
+ * 
+ */
+public class Vestido implements Comparable<Vestido>, Cloneable {
+	private String nombre;
+	private double precio;
+	private int codigo;
+	//private static int contador;
+	
+	
+	public Vestido(){
+		nombre=" ";
+		codigo=000;
+		precio=0;
+	}
+	
+	public Vestido(String nombre, double precio, int codigo){
+		if(nombre.replace(" ", ""))
+		this.nombre=nombre;
+		this.codigo=codigo;
+		this.precio=precio;
+	}
+	
+	public Vestido(Vestido vestido){
+		this.nombre=vestido.getNombre();
+		this.codigo=vestido.getCodigo();
+		this.precio=vestido.getPrecio();
+	}
+
+	//Consultores
+	public String getNombre(){
+		return nombre;
+	}
+	
+	public double getPrecio() {
+		return precio;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+	
+	//Modificadores
+	public void setPrecio(double precio) {
+		this.precio = precio;
+	}
+
+
+	
+	/*
+	 * Devolverá 0 si los vestidos tienen los mismos valores en los atributos, -1 si el vestido que llega es más caro y 1 si no.
+	 */
+	@Override
+	public int compareTo(Vestido vestido){
+		int comparacion=0;
+		
+		if(nombre==vestido.getNombre() && codigo==vestido.getCodigo() && precio==vestido.getPrecio()){
+			comparacion=0;
+		}else if(precio<vestido.getPrecio()){
+				comparacion=-1;
+			}else if(precio>vestido.getPrecio()){
+				comparacion=1;
+			}
+		
+		return comparacion;
+	}
+	
+	
+	
+	//Los objetos son iguales si tienen los mismos valores en sus atributos
+	@Override
+	public boolean equals(Object obj){
+		boolean iguales=false;
+		if(obj!=null && obj instanceof Vestido){
+			Vestido vestido=(Vestido) obj;
+			if(nombre==vestido.getNombre() && codigo==vestido.getCodigo() && precio==vestido.getPrecio()){
+				iguales=true;
+			}
+		}
+		return iguales;
+	}
+	
+	@Override
+	public Vestido clone(){
+		Vestido copia=null;
+		
+		try{
+			copia=(Vestido) super.clone();
+		}catch(CloneNotSupportedException error){
+			System.out.println(error);
+		}
+		
+		return copia;
+	}
+	
+	
+	@Override
+	public int hashCode(){
+		int cod=codigo*31/7;
+		return cod;
+	}
+	
+	@Override
+	public String toString(){
+		String cadena=nombre+", "+precio+", "+codigo;
+		return cadena;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Formatter;
+
+
+public class prueba {
+	public static void main(String[] args)throws IOException{
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String ruta="archivo.txt";
+		File archivo=new File(ruta);
+		
+		
+		
+		try{
+			Formatter format=new Formatter(ruta);
+		}catch(Exception error){
+			System.out.println(error);
+		}
+		
+		
+		if(archivo.exists()){
+			System.out.println(archivo.getName()+" existe");
+		}else{
+			System.out.println("No existe");
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

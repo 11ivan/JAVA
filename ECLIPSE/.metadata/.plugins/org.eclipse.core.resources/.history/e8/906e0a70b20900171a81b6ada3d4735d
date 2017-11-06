@@ -1,0 +1,38 @@
+//Jugador.java
+
+/*
+ * Propiedades:
+ * 	Nombre: Basica, cadena, consultable, modificable
+ * 	Dado: Basica, entero aleatorio, consultable, no modificable
+ * 
+ * 
+ * 
+ * 
+ * Interfaz:
+ * 	String getNombre
+ * 	void setNombre
+ * 
+ * 	int getDado
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+public class Jugador {
+
+	public Jugador() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

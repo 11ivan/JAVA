@@ -1,0 +1,65 @@
+
+import java.util.Random;
+
+public class gestoraJuego {
+
+	
+//----------------------------------------------------------------------------------------------------		
+	
+	//validaJuega
+	
+	public static boolean validaJuega(char juega){
+		boolean valido=false;
+		if(juega!='s' && juega!='n'){
+			valido=false;
+		}
+		return valido;
+	}
+	
+//----------------------------------------------------------------------------------------------------	
+	
+	//tiraDado
+	public static int tiraDado(){
+		Random aleatorio=new Random();
+		return aleatorio.nextInt(6)+1;
+	}
+	
+//----------------------------------------------------------------------------------------------------
+	
+	//compruebaDados
+	//0 si son iguales, 1 si el dado1 es mayor, 2 si no
+	public static int compruebaDados(int dado1, int dado2){
+		int mayor;
+		if(dado1>dado2){
+			mayor=1;
+		}else if(dado1<dado2){
+			mayor=2;
+		}else{
+			mayor=0;
+		}
+		return mayor;
+	}
+		
+//----------------------------------------------------------------------------------------------------	
+	
+	//compruebaNombre
+	public static boolean compruebaNombre(String nombre){
+		boolean valido=true;
+		
+		if(nombre.length()==0){
+			valido=false;
+		}
+		return valido;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+}

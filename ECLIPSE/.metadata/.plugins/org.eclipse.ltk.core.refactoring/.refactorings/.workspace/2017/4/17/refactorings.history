@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;PostRAF&apos;" deleteContents="false" description="Delete resource &apos;PostRAF&apos;" element1="/PostRAF" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1493224204319"/>
+</session>

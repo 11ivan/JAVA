@@ -1,0 +1,36 @@
+/*Articulo.java
+ * 
+ * Propiedades:
+ * 	Vestido: Basica, tipo Vestido, consultable, no modificable
+ * 	Cantidad: Basica, entero, consultable, modificable
+ * 
+ * 
+ */
+public class Articulo {
+	private Vestido vestido;
+	private int cantidad;
+	
+	public Articulo(){
+		vestido=new Vestido();
+		cantidad=0;
+	}
+	
+	
+	public Vestido getVestido(){
+		return vestido;
+	}
+	
+	public int getCantidad(){
+		return cantidad;
+	}
+	
+	public void setCantidad(int cantidad){
+		this.cantidad=cantidad;
+	}
+	
+	
+	
+	
+	
+	
+}

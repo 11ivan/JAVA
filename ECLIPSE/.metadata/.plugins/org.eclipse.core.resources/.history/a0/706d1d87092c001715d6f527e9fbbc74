@@ -1,0 +1,754 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
+import java.nio.file.ReadOnlyFileSystemException;
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.EOFException;
+
+public class GestoraProgPrinc {
+	
+	private String archivo;
+	
+	public GestoraProgPrinc(){
+		archivo="archivoProfesores.dat";
+	}
+	
+//-------------------------------------------------------------------------------------------
+	
+	public void pintaMenu(){
+		System.out.println("\nElija una opción del menú");
+		System.out.println("0 para: Salir");
+		System.out.println("1 para: Edad promedio del grupo de profesores.");
+		System.out.println("2 para: Nombre del profesor más joven del grupo");
+		System.out.println("3 para: Nombre del profesor de más edad");
+		System.out.println("4 para: Número de profesores con edad mayor al promedio");
+		System.out.println("5 para: Número de profesores con edad menor al promedio");
+		System.out.println("6 para: Lista de profesores");
+		System.out.println("7 para: Añadir profesor");
+		System.out.println("8 para: Borrar profesor\n\n");
+
+	}
+	
+//-------------------------------------------------------------------------------------------
+	
+	/* Proposito: 
+	 * Prototipo:
+	 * Precondiciones: 
+	 * Entradas:
+	 * Salidas: 
+	 * Postcondiciones: 
+	 */
+	public boolean validaOpcion(String opcion){
+		boolean vale=false;
+		int parseo=-1;
+		
+		try{
+			parseo=Integer.parseInt(opcion);
+		}catch(NumberFormatException error){
+			System.out.println("Se esperaba un numero");
+		}
+		
+		if(parseo>=0 && parseo<=8){
+			vale=true;
+		}
+		
+		return vale;
+	}
+	
+//-------------------------------------------------------------------------------------------
+
+	/* Proposito: 
+	 * Prototipo:
+	 * Precondiciones: 
+	 * Entradas:
+	 * Salidas: 
+	 * Postcondiciones: 
+	 */
+	/*public double edadPromedio(){
+		ArrayList<Profesor> profesores=null;
+		double edadProm=0.0;
+		int contadorPersonas=0;
+		int acumEdad=0;
+		
+		profesores=cargaArrayProfesores();
+		
+		for(int i=0;i<profesores.size();i++){
+			contadorPersonas++;
+			acumEdad=acumEdad+profesores.get(i).getAge();
+		}
+		edadProm=acumEdad/contadorPersonas;
+		
+		return edadProm;
+	}*/
+	
+	public double edadPromedio(){
+		double edadProm=0.0;
+		int contadorPersonas=0;
+		int acumEdad=0;
+		File file=new File(this.archivo);
+		ObjectInputStream ois =null;
+		FileInputStream fis=null;
+		boolean sigue=true;
+		
+		if(file.exists() && file.getTotalSpace()>0){
+			try {		
+				fis = new FileInputStream(file);
+				
+				//Si el tamaño del fichero es 0 usaremos ObjectOutputStream por defecto
+				if(file.getTotalSpace()==0){
+					ois = new ObjectInputStream(fis);
+				}else{
+					ois = new ObjectInputStream(fis){@Override protected void readStreamHeader(){}};//Sino sobreescribiremos el metodo readStreamHeader de ObjectInputStream	
+				}																								
+				
+				while(sigue){
+					Profesor p=null;
+					try {
+						p = (Profesor) ois.readObject();
+						acumEdad=acumEdad+p.getAge();
+						contadorPersonas++;
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}catch(EOFException error){
+						sigue=false;
+					}
+	
+				}
+	
+			} catch (FileNotFoundException error) {
+				error.printStackTrace();
+			} catch (IOException error) {
+				error.printStackTrace();
+			}finally{
+				try {
+					if(ois!=null){
+						ois.close();
+					}
+					if(fis!=null){
+						fis.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			
+			}
+			edadProm=acumEdad/contadorPersonas;
+		}
+		return edadProm;
+	}
+
+	
+
+//-------------------------------------------------------------------------------------------
+
+	/*//INTERFAZ ProfesorJoven
+	 * Cabecera: public void ProfesorJoven()
+	 * Comentario: Dice cual es el profesor más joven de todos
+	 * Prec: Nada
+	 * Entrada: Nada
+	 * Salida: Nada
+	 * Post: Muestra en pantalla el nombre y la edad del profesor más joven del grupo
+	 */	
+	public void ProfesorJoven(){
+		Profesor p=null;
+		Profesor pjoven=null;
+		
+		File f=null;
+		FileInputStream fis=null;
+		ObjectInputStream ois=null;
+		
+		try{
+			f=new File(this.archivo);
+			fis=new FileInputStream(f);
+			ois=new ObjectInputStream(fis);
+			
+			p=(Profesor) ois.readObject();
+			pjoven=p;
+			while(p!=null){
+				if(pjoven.getAge()>p.getAge()){
+					pjoven=p;
+				}
+				p=(Profesor) ois.readObject();
+			}
+			
+		}catch(ClassNotFoundException e){
+		}catch(EOFException e){ 
+		}catch(IOException e){
+			System.out.println(e);
+		}finally{
+			try{
+			ois.close();
+			fis.close();
+			}catch(IOException e){
+				System.out.println(e);
+			}
+		}
+		
+		System.out.println("El profesor mas joven es "+pjoven.getNombre()+" con "+pjoven.getAge()+" años.");
+		
+	}
+	
+//-------------------------------------------------------------------------------------------	
+	/*//INTERFAZ ProfesorMayor
+	 * Cabecera: public void ProfesorMayor()
+	 * Comentario: Dice cual es el profesor más viejo de todos
+	 * Prec: Nada
+	 * Entrada: Nada
+	 * Salida: Nada
+	 * Post: Muestra en pantalla el nombre y la edad del profesor más viejo del grupo
+	 */	
+	public void ProfesorMayor(){
+		Profesor p=null;
+		Profesor pmayor=null;
+		
+		File f=null;
+		FileInputStream fis=null;
+		ObjectInputStream ois=null;
+		
+		try{
+			f=new File(this.archivo);
+			fis=new FileInputStream(f);
+			ois=new ObjectInputStream(fis);
+			
+			p=(Profesor) ois.readObject();
+			pmayor=p;
+			while(p!=null){
+				if(pmayor.getAge()<p.getAge()){
+					pmayor=p;
+				}
+				p=(Profesor) ois.readObject();
+			}
+			
+		}catch(ClassNotFoundException e){
+		}catch(EOFException e){ 
+		}catch(IOException e){
+			System.out.println(e);
+		}finally{
+			try{
+			ois.close();
+			fis.close();
+			}catch(IOException e){
+				System.out.println(e);
+			}
+		}
+		
+		System.out.println("El profesor mas viejo es "+pmayor.getNombre()+" con "+pmayor.getAge()+" anios.");
+	}
+	
+//-------------------------------------------------------------------------------------------	
+	/*//INTERFAZ MenorAMedia
+	 * Cabecera: public void MenorAMedia()
+	 * Comentario: Muestra una lista con los profesores cuya edad es menor a la media.
+	 * Prec: Nada
+	 * Entrada: Nada
+	 * Salida: Nada
+	 * Post: Muestra en pantalla un listado con nombre y edad de profesores menor a la media.
+	 */	
+	public void MenorAMedia(){
+		//Profesor[] profesores;
+		File f=null;
+		FileInputStream fis=null;
+		ObjectInputStream ois=null;
+		Profesor p=null;
+		double edadMedia;
+		edadMedia=MediaEdadProfesores();
+		
+		try{
+			f=new File(this.archivo);
+			fis=new FileInputStream(f);
+			ois=new ObjectInputStream(fis);
+			
+			System.out.println("La edad media del profesorado actual es: "+edadMedia);
+			
+			p=(Profesor) ois.readObject();
+			while(p!=null){
+				if(p.getAge()<edadMedia){
+					System.out.println("Profesor: "+p.getNombre()+"   \tEdad: "+p.getAge());
+				}
+				p=(Profesor) ois.readObject();
+			}
+		}catch(ClassNotFoundException e){
+		}catch(EOFException e){
+		}catch(IOException e){
+			System.out.println(e);
+		}finally{
+			try{
+			ois.close();
+			fis.close();
+			}catch(IOException e){
+				System.out.println(e);
+			}
+		}
+	}
+	
+//-------------------------------------------------------------------------------------------	
+	/*//INTERFAZ MayorAMedia
+	 * Cabecera: public void MayorAMedia()
+	 * Comentario: Muestra una lista con los profesores cuya edad es mayor a la media.
+	 * Prec: Nada
+	 * Entrada: Nada
+	 * Salida: Nada
+	 * Post: Muestra en pantalla un listado con nombre y edad de profesores mayor a la media.
+	 */
+	public void MayorAMedia(){
+		//Profesor[] profesores;
+		File f=null;
+		FileInputStream fis=null;
+		ObjectInputStream ois=null;
+		Profesor p=null;
+		double edadMedia;
+		edadMedia=MediaEdadProfesores();
+		
+		try{
+			f=new File(this.archivo);
+			fis=new FileInputStream(f);
+			ois=new ObjectInputStream(fis);
+			
+			System.out.println("La edad media del profesorado actual es: "+edadMedia);
+			
+			p=(Profesor) ois.readObject();
+			while(p!=null){
+				if(p.getAge()>edadMedia){
+					System.out.println("Profesor: "+p.getNombre()+"   \tEdad: "+p.getAge());
+				}
+				p=(Profesor) ois.readObject();
+			}
+		}catch(ClassNotFoundException e){
+		}catch(EOFException e){
+		}catch(IOException e){
+			System.out.println(e);
+		}finally{
+			try{
+			ois.close();
+			fis.close();
+			}catch(IOException e){
+				System.out.println(e);
+			}
+		}
+	}	
+	
+//-------------------------------------------------------------------------------------------------------------------------------	
+	/*//INTERFAZ MediaEdadProfesores
+	 * Cabecera: public void MediaEdadProfesores() throws ClassNotFoundException
+	 * Comentario: Calcula la edad media de todos los profesores
+	 * Prec: Nada
+	 * Entrada: Nada
+	 * Salida: double
+	 * Post: Devuelve asociado al nombre la edad media del grupo de profesores.
+	 */	
+	public double MediaEdadProfesores(){
+		double mediaEdad=0;
+		int nprofesores=0;
+		Profesor p = null;
+		
+		File f=null;
+		FileInputStream fis=null;
+		ObjectInputStream ois=null;
+		
+		try{
+			f=new File(this.archivo);
+			fis=new FileInputStream(f);
+			ois=new ObjectInputStream(fis);
+			
+			p = (Profesor) ois.readObject();
+			while(p != null) { //Vamos acumulando las edades y contando la cantidad total de profesores, para realizar el calculo.
+				mediaEdad=mediaEdad+p.getAge();
+				nprofesores++;
+				p = (Profesor) ois.readObject();
+			}
+				
+		}catch(ClassNotFoundException e){
+        }catch(EOFException e){ 
+        }catch(IOException e){
+        	System.out.println(e);
+        }finally{
+        	try{
+    			ois.close();
+    			fis.close();
+    		}catch(IOException e){
+    			System.out.println(e);
+    		}
+        }
+		
+		//Calculamos la Media
+		mediaEdad=mediaEdad/nprofesores;
+		mediaEdad=Math.floor(mediaEdad*100)/100;; //Reducimos el numero de decimales.
+		
+		return mediaEdad;
+	}
+
+	
+//-------------------------------------------------------------------------------------------
+	/* Proposito: Carga un ArrayList con todos los profesores que hay en el archivo binario
+	 * Prototipo: ArrayList<Profesor> cargaArrayProfesores()
+	 * Precondiciones: 
+	 * Entradas:
+	 * Salidas: 
+	 * Postcondiciones: 
+	 */	
+	public ArrayList<Profesor> cargaArrayProfesores(){
+		File file=new File(this.archivo);
+		ArrayList<Profesor> profesores=new ArrayList<Profesor>();
+		ObjectInputStream ois =null;
+		FileInputStream fis=null;
+		boolean sigue=true;
+		
+		try {		
+			fis = new FileInputStream(file);
+			//Si el tamaño del fichero es 0 usaremos ObjectOutputStream por defecto
+			if(file.getTotalSpace()==0){
+				ois = new ObjectInputStream(fis);
+			}else{
+				ois = new ObjectInputStream(fis){@Override protected void readStreamHeader(){}};//Sino sobreescribiremos el metodo readStreamHeader de ObjectInputStream	
+			}																								
+			
+			while(sigue){
+				Profesor p=null;
+				try {
+					p = (Profesor) ois.readObject();					
+					profesores.add(p);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}catch(EOFException error){
+					sigue=false;
+				}
+
+			}
+
+		} catch (FileNotFoundException error) {
+			error.printStackTrace();
+		} catch (IOException error) {
+			error.printStackTrace();
+		}finally{
+			try {
+				if(ois!=null){
+					ois.close();
+				}
+				if(fis!=null){
+					fis.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
+		return profesores;		
+	}
+	
+//-------------------------------------------------------------------------------------------	
+
+	public void leePersonas(){
+		File file=new File(this.archivo);
+		ObjectInputStream ois =null;
+		FileInputStream fis=null;
+		boolean sigue=true;
+		
+		if(file.exists() && file.getTotalSpace()>1){
+			try {		
+				fis = new FileInputStream(file);
+				
+				//Si el tamaño del fichero es 0 usaremos ObjectOutputStream por defecto
+				if(file.getTotalSpace()==0){
+					ois = new ObjectInputStream(fis);
+				}else{
+					ois = new ObjectInputStream(fis){@Override protected void readStreamHeader(){}};//Sino sobreescribiremos el metodo readStreamHeader de ObjectInputStream	
+				}																								
+				
+				while(sigue){
+					Profesor p=null;
+					try {
+						p = (Profesor) ois.readObject();
+						//System.out.println(ois.readObject().toString());
+						System.out.println(p.toString());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}catch(EOFException error){
+						sigue=false;
+					}
+	
+				}
+	
+			} catch (FileNotFoundException error) {
+				error.printStackTrace();
+			} catch (IOException error) {
+				error.printStackTrace();
+			}finally{
+				try {
+					if(ois!=null){
+						ois.close();
+					}
+					if(fis!=null){
+						fis.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			
+			}
+		}else{
+			System.out.println("El fichero no existe o esta vacio");
+		}
+	}
+	
+//-------------------------------------------------------------------------------------------
+	/*public void escribePersonas(){
+		File file=new File(this.archivo);
+		FileOutputStream fos=null;
+		ObjectOutputStream oos=null;
+		try {
+			fos=new FileOutputStream(file,true);			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			oos=new ObjectOutputStream(fos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			oos.writeObject(new Persona("Pepe", "Castro", new Fecha2(2,3,1990),'H',"47391688"));
+			oos.writeObject(new Persona("Ana", "ToRoja", new Fecha2(12,10,1989),'M',"77813733"));
+			oos.writeObject(new Persona("Juan", "Gonzalez", new Fecha2(26,6,1987),'H',"47391688"));			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ExcepcionPersona e) {
+			e.printStackTrace();
+		} catch (ExcepcionFecha e) {
+			e.printStackTrace();
+		}
+		try {
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	*/
+
+//-------------------------------------------------------------------------------------------
+	/* Proposito: Inserta un profesor en un archivo binario
+	 * Prototipo:
+	 * Precondiciones: Todos los atributos del profesor deben ser válidos
+	 * Entradas: Un profesor
+	 * Salidas: Un booleano 
+	 * Postcondiciones: El booleano será verdadero si el profesor se ha insertado con éxito y falso sino 
+	 * Restricciones: El profesor no debe existir en la lista para introducirlo, su edad debe ser mayor que 25(nacido en el 91) y menor que 65 (nacido en el 57)
+	 */		
+	public boolean addProfesor(Profesor profesor){
+		File file=new File(this.archivo);
+		FileOutputStream fos=null;
+		ObjectOutputStream oos=null;
+		boolean introducido=false;
+		
+		//Abrimos el fichero
+		try {
+			if(file.exists()){
+				fos=new FileOutputStream(file,true);
+			}else{
+				fos=new FileOutputStream(file);//Sino existe lo creamos
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+				
+		try {
+			//Si el tamaño del fichero es 0 usaremos ObjectOutputStream por defecto
+			if(file.getTotalSpace()==0){
+				oos=new ObjectOutputStream(fos);
+				oos.writeObject(profesor);
+				introducido=true;
+			}else{
+				oos=new ObjectOutputStream(fos){@Override protected void writeStreamHeader(){}};//Sino sobreescribiremos el metodo writeStreamHeader de ObjectOutputStream
+				oos.writeObject(profesor);															//Para que no sobreescriba la cabecera
+				introducido=true;	
+			}																					
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		
+		return introducido;
+	}
+
+	
+	
+//-------------------------------------------------------------------------------------------
+		/* Proposito: Borra un profesor en un archivo binario
+		 * Prototipo: boolean dropProfesor(String dni)
+		 * Precondiciones: 
+		 * Entradas: Una cadena que será el dni del profesor a borrar
+		 * Salidas: Un booleano 
+		 * Postcondiciones: El booleano será verdadero si el profesor se ha borrado con éxito y falso sino 
+		 * Restricciones: El archivo debe existir y contener algún profesor
+		 */		
+		public boolean dropProfesor(String dni){
+			boolean borrado=false;
+			File file=new File(this.archivo);
+			File fileAux=new File("archivoProfesoresAux.dat");
+			FileInputStream fis=null;
+			ObjectInputStream ois=null;
+			FileOutputStream fos=null;
+			ObjectOutputStream oos=null;
+			boolean sigue=true;
+			
+			if(file.exists() && file.getTotalSpace()>0){//Si el archivo existe y contiene algun dato 
+				
+				
+				try {					
+					//Abrimos el archivo para leer
+					fis=new FileInputStream(file);	
+							
+					if(file.getTotalSpace()==0){//Si no contiene datos usamos ObjectInputStream por defecto
+						ois=new ObjectInputStream(fis);
+					}else{
+						ois=new ObjectInputStream(fis){@Override protected void readStreamHeader(){}};//Si contiene datos usamos ObjectInputStream sobreecribiendo el metodo readStreamHeader()
+					}
+					
+					//Abrimos el fichero para escribir
+					fos=new FileOutputStream(fileAux);	
+
+					//if(file.getTotalSpace()==0){
+						oos=new ObjectOutputStream(fos);//El arhivo a escribir siempre se crea así que no necesitamos comprobar si el fichero contiene algun dato
+					//}else{
+					//	oos=new ObjectOutputStream(fos){@Override protected void writeStreamHeader(){}};
+					//}
+
+					while(sigue){
+						Profesor p=new Profesor();			
+						try {
+							p=(Profesor)ois.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (EOFException e) {
+							sigue=false;
+						}
+						if(sigue){
+							try {
+								oos.writeObject(p);//Escribimos en el archivo creado todos los profesores excepto el que borramos
+								//borrado=true;
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+
+							if(!p.getDNI().equals(dni)){
+								oos.reset();
+							}//fin si
+
+							
+							/*if(!p.getDNI().equals(dni)){
+								
+								try {
+									oos.writeObject(p);//Escribimos en el archivo creado todos los profesores excepto el que borramos
+									//borrado=true;
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}//fin si*/
+						}					
+					}//fin mientras
+				}catch(IOException error){
+					error.printStackTrace();
+				}
+				
+			
+				try{
+					oos.close();
+					ois.close();
+				}catch(IOException e){		
+					e.printStackTrace();
+				}		
+				
+				System.out.println(file.delete());
+				System.out.println(fileAux.renameTo(file));
+				
+			}//fin si
+						
+			return borrado;
+		}
+	
+	
+	
+	/*	public boolean dropProfesor(String dni){
+			boolean borrado=false;
+			File file=new File(this.archivo);
+			FileInputStream fis=null;
+			ObjectInputStream ois=null;
+			FileOutputStream fos=null;
+			ObjectOutputStream oos=null;
+			boolean sigue=true;
+			
+			if(file.exists() && file.getTotalSpace()>0){
+				try {
+					fis=new FileInputStream(file);	
+							
+					if(file.getTotalSpace()==0){
+						ois=new ObjectInputStream(fis);
+					}else{
+						ois=new ObjectInputStream(fis){@Override protected void readStreamHeader(){}};
+					}
+					try {
+						fos=new FileOutputStream(file, true);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}		
+
+					if(file.getTotalSpace()==0){
+						oos=new ObjectOutputStream(fos);
+					}else{
+						oos=new ObjectOutputStream(fos){@Override protected void writeStreamHeader(){}};
+					}
+
+					while(sigue){
+						Profesor p=new Profesor();			
+						try {
+							p=(Profesor)ois.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (EOFException e) {
+							sigue=false;
+						}
+						if(sigue){
+							if(p.getDNI().equals(dni)){
+								
+								try {
+									oos.writeObject(" ");/////---------------------------
+									borrado=true;
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}//fin si
+						}					
+					}//fin mientras
+				}catch(IOException error){
+					error.printStackTrace();
+				}
+				try{
+					oos.close();
+					ois.close();
+				}catch(IOException e){		
+					e.printStackTrace();
+				}
+			
+			}//fin si
+			
+			return borrado;
+		}*/
+	
+		
+		
+		
+		
+		
+		
+	
+}
